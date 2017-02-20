@@ -2,9 +2,9 @@
 set -eo pipefail
 
 function wait_for_database {(
-  set +e
   for try in {1..60} ; do
-    python -c "from django.db import connection; connection.connect()" &> /dev/null && break
+    python -c "from django.db import connection; connection.connect()" >/dev/null 2>&1
+    [[ $? -eq 0 ]] && return
     echo "Waiting for database to respond..."
     sleep 1
   done
