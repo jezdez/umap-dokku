@@ -50,6 +50,6 @@ COPY docker-entrypoint.sh settings.py uwsgi.ini /srv/umap/
 
 EXPOSE 5000
 
-ENTRYPOINT ["/tini", "--", "/srv/umap/docker-entrypoint.sh"]
+ENTRYPOINT ["/tini", "--"]
 
-CMD ["web"]
+CMD ["/srv/umap/docker-entrypoint.sh"]
