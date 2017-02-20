@@ -4,15 +4,15 @@ set -eo pipefail
 case $1 in
   web)
     # first migrate the database
-    while ! umap migrate 2>&1; do
+    while ! exec umap migrate 2>&1; do
         sleep 5
     done
     # then collect static files
-    umap collectstatic --noinput
+    exec umap collectstatic --noinput
     # create languagae files
-    umap storagei18n
+    exec umap storagei18n
     # compress static files
-    umap compress
+    exec umap compress
     # run uWSGI
     exec uwsgi --ini uwsgi.ini
     ;;
