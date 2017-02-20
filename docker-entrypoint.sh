@@ -10,7 +10,7 @@ function wait_for_database {(
   tries=0
   while true; do
     [[ $tries -lt $TRIES ]] || return
-    (python -c "from django.db import connection; connection.connect()") >/dev/null 2>&1
+    (echo "from django.db import connection; connection.connect()" | umap shell) >/dev/null 2>&1
     [[ $? -eq 0 ]] && return
     sleep $SLEEP
     tries=$((tries + 1))
