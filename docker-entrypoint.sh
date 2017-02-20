@@ -1,12 +1,19 @@
 #!/usr/bin/env bash
 set -eo pipefail
 
+# default variables
+: "${SLEEP:=1}"
+: "${TRIES:=60}"
+
 function wait_for_database {(
-  for try in {1..60} ; do
-    python -c "from django.db import connection; connection.connect()" >/dev/null 2>&1
+  echo "Waiting for database to respond..."
+  tries=0
+  while true; do
+    [[ $tries -lt $TRIES ]] || return
+    (python -c "from django.db import connection; connection.connect()") >/dev/null 2>&1
     [[ $? -eq 0 ]] && return
-    echo "Waiting for database to respond..."
-    sleep 1
+    sleep $SLEEP
+    tries=$((tries + 1))
   done
 )}
 
